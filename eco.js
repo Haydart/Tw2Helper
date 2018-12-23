@@ -14,4 +14,12 @@ function createWindow() {
 
     win.loadURL("https://pl.tribalwars2.com/");
 
+    win.webContents.openDevTools();
+
+    win.webContents.on("will-navigate", (event, _) => {
+        event.preventDefault();
+    });
+
+    win.once("did-finish-load", () => {
+    });
 }
