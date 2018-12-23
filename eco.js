@@ -23,3 +23,5 @@ function createWindow() {
     window.once("did-finish-load", () => {
     });
 }
+
+app.on("ready", createWindow);
