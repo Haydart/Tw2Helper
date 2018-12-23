@@ -2,7 +2,7 @@ const {app, BrowserWindow} = require("electron");
 const path = require("path");
 
 function createWindow() {
-    const win = new BrowserWindow({
+    const window = new BrowserWindow({
         width: 800,
         height: 600,
         webPreferences: {
@@ -12,14 +12,14 @@ function createWindow() {
         }
     });
 
-    win.loadURL("https://pl.tribalwars2.com/");
+    window.loadURL("https://pl.tribalwars2.com/");
 
-    win.webContents.openDevTools();
+    window.webContents.openDevTools();
 
-    win.webContents.on("will-navigate", (event, _) => {
+    window.webContents.on("will-navigate", (event, _) => {
         event.preventDefault();
     });
 
-    win.once("did-finish-load", () => {
+    window.once("did-finish-load", () => {
     });
 }
