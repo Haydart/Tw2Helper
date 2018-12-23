@@ -1,0 +1,18 @@
+{
+  "name": "tb_hack",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "electron": "^3.0.10",
+    "http-debug": "^0.1.2",
+    "socket.io-client": "^2.0.3",
+    "socketio-wildcard": "^2.0.0",
+    "websocket": "^1.0.28"
+  }
+}
