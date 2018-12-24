@@ -1,4 +1,4 @@
-RESOURCE_TRANSPORT_ITERATIONS = 50;
+RESOURCE_TRANSPORT_ITERATIONS = 500;
 COIN_MINTING_ITERATIONS = 1000;
 NOBLEMAN_COST = [28000, 30000, 25000];
 
@@ -68,13 +68,13 @@ function distributeAndMintInIntervals() {
         setTimeout(() => {
             fetchOwnVillagesInfo(mintCoins);
 
-        }, 1000 * 60 * 6 * i) //6 minutes
+        }, 1000 * 60 * 6 * i)
     }
 
     for (i = 0; i < RESOURCE_TRANSPORT_ITERATIONS; i++) {
         setTimeout(() => {
             sendResourcesIfViable()
-        }, 1000 * 60 * 60 * i) //1 hour
+        }, 1000 * 60 * 15 * i)
     }
 }
 
