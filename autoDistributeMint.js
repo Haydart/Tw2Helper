@@ -9,7 +9,7 @@ module.exports = {
 
 let socketService = null;
 let routeProvider = null;
-let user = {id: undefined, worldId: undefined};
+let user = {id: undefined, worldId: undefined, plainVillages: [], academyVillages: []};
 
 function setupBot(_socketService, _routeProvider) {
     socketService = _socketService;
@@ -63,14 +63,21 @@ function getOwnVillages() {
         routeProvider.GET_CHARACTER_VILLAGES,
         {},
         response => {
-            OnOwnVillagesFetched(response);
+            onOwnVillagesFetched(response);
         })
 }
 
-function OnOwnVillagesFetched(response) {
+function onOwnVillagesFetched(response) {
     console.log(response);
 
     response.villages.forEach((village) => {
-        console.log(village.name)
+        if (village.academy) {
+            user.academyVillages.push(village)
+        } else {
+            user.plainVillages.push(village)
+        }
     });
+
+    console.log("academy villages" + user.academyVillages);
+    console.log("plain villages" + user.plainVillages);
 }
