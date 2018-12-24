@@ -1,5 +1,6 @@
 const {app, BrowserWindow} = require("electron");
 const path = require("path");
+const distributeAndMint = require("./auto_distribute_mint");
 
 function createWindow() {
     const window = new BrowserWindow({
@@ -21,7 +22,10 @@ function createWindow() {
     });
 
     window.once("did-finish-load", () => {
+        console.log("Finished loading");
     });
 }
 
 app.on("ready", createWindow);
+
+global.startBot = distributeAndMint.run;

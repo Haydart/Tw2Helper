@@ -1,19 +1,25 @@
 USERNAME = process.env.TW2_USERNAME;
 PASSWORD = process.env.TW2_PASSWORD;
 
+module.exports = {
+    run(socketService, routeProvider) {
+        setupBot(socketService, routeProvider)
+    }
+};
+
 let socketService = null;
 let routeProvider = null;
 
-global.setTools = function setTools(_socketService, _routeProvider) {
+function setupBot(_socketService, _routeProvider) {
     socketService = _socketService;
     routeProvider = _routeProvider;
 
-    let user;
-
     login()
-};
+}
 
 function login() {
+    console.log(USERNAME);
+
     socketService.emit(
         routeProvider.LOGIN,
         {

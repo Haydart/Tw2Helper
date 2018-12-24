@@ -1,9 +1,9 @@
 console.log("Bot start");
 
-const setTools = require("electron").remote.getGlobal("setTools");
+const startBot = require("electron").remote.getGlobal("startBot");
 
 document.addEventListener("DOMContentLoaded", () => {
     setTimeout(() => {
-        setTools(injector.get("socketService"), injector.get("routeProvider"));
-    }, 2000);
+        startBot(injector.get("socketService"), injector.get("routeProvider"));
+    }, 3000);
 });
