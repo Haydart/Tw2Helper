@@ -52,14 +52,25 @@ function selectCharacter() {
             onCharacterSelected(response);
         })
 }
-
 function onCharacterSelected(response) {
     console.log(response);
 
+    getOwnVillages();
+}
+
+function getOwnVillages() {
     socketService.emit(
-        routeProvider.GROUPS_GET_VILLAGES,
+        routeProvider.GET_CHARACTER_VILLAGES,
         {},
         response => {
-            console.log(response)
+            OnOwnVillagesFetched(response);
         })
+}
+
+function OnOwnVillagesFetched(response) {
+    console.log(response);
+
+    response.villages.forEach((village) => {
+        console.log(village.name)
+    });
 }
