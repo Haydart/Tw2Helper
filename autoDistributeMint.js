@@ -9,6 +9,7 @@ module.exports = {
 
 let socketService = null;
 let routeProvider = null;
+let user = {id: undefined, worldId: undefined};
 
 function setupBot(_socketService, _routeProvider) {
     socketService = _socketService;
@@ -30,5 +31,24 @@ function login() {
 }
 
 function onLoginComplete(loginData) {
-    console.log(loginData)
+    console.log(loginData);
+
+    user.id = loginData.player_id;
+    user.worldId = loginData.characters[0].world_id;
+    console.log(user);
+
+    selectCharacter();
+}
+
+function selectCharacter() {
+    socketService.emit(
+        routeProvider.SELECT_CHARACTER,
+        {
+            id: user.id,
+            world_id: user.worldId,
+            ref_param: undefined
+        },
+        response => {
+            onCharacterSelected(response);
+        })
 }
