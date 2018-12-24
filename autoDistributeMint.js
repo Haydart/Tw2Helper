@@ -1,4 +1,6 @@
-ITERATIONS = 1000;
+RESOURCE_TRANSPORT_ITERATIONS = 50;
+COIN_MINTING_ITERATIONS = 1000;
+NOBLEMAN_COST = [28000, 30000, 25000];
 
 const Store = require('electron-store');
 const store = new Store();
@@ -62,11 +64,39 @@ function onCharacterSelected(response) {
 }
 
 function distributeAndMintInIntervals() {
-    for (i = 0; i < ITERATIONS; i++) {
+    for (i = 0; i < RESOURCE_TRANSPORT_ITERATIONS; i++) {
         setTimeout(() => {
             startResourceDistribution()
-        }, 1000 * 60 * 5 * i)
+        }, 1000 * 60 * 60 * i) //1 hour
     }
+
+    for (i = 0; i < COIN_MINTING_ITERATIONS; i++) {
+        setTimeout(() => {
+            startCoinMinting()
+        }, 1000 * 60 * 6 * i) //6 minutes
+    }
+}
+
+function startCoinMinting() {
+    user.academyVillages.forEach((academyVillage) => {
+        let mintAmount = Math.min(
+            Math.floor(academyVillage.res_wood / NOBLEMAN_COST[0]),
+            Math.floor(academyVillage.res_clay / NOBLEMAN_COST[1]),
+            Math.floor(academyVillage.res_iron / NOBLEMAN_COST[2])
+        );
+
+        if (mintAmount > 0) {
+            socketService.emit(
+                routeProvider.MINT_COINS,
+                {
+                    village_id: academyVillage.id,
+                    amount: mintAmount
+                },
+                response => {
+                    onOwnVillagesFetched(response);
+                })
+        }
+    })
 }
 
 function startResourceDistribution() {
@@ -132,16 +162,16 @@ function sendResourcesToClosestAcademyVillage(village, availableMerchantsCount) 
         }
     });
 
-    transportCapacity = availableMerchantsCount * 1000;
-    woodAmount = Math.min(village.res_wood, Math.floor(transportCapacity / 3));
-    clayAmount = Math.min(village.res_clay, Math.floor(transportCapacity / 3));
-    ironAmount = Math.min(village.res_iron, Math.floor(transportCapacity / 3));
+    let transportCapacity = availableMerchantsCount * 1000;
+    let woodAmount = Math.min(village.res_wood, Math.floor(transportCapacity / 3));
+    let clayAmount = Math.min(village.res_clay, Math.floor(transportCapacity / 3));
+    let ironAmount = Math.min(village.res_iron, Math.floor(transportCapacity / 3));
 
-    performSendResources(village.id, closestAcademyVillageId, woodAmount, clayAmount, ironAmount)
+    sendResources(village.id, closestAcademyVillageId, woodAmount, clayAmount, ironAmount)
 }
 
 
-function performSendResources(startVillageId, targetVillageId, woodAmount, clayAmount, ironAmount) {
+function sendResources(startVillageId, targetVillageId, woodAmount, clayAmount, ironAmount) {
     socketService.emit(
         routeProvider.TRADING_SEND_RESOURCES,
         {
