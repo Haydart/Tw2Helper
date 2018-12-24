@@ -64,20 +64,49 @@ function onCharacterSelected(response) {
 }
 
 function distributeAndMintInIntervals() {
-    for (i = 0; i < RESOURCE_TRANSPORT_ITERATIONS; i++) {
-        setTimeout(() => {
-            startResourceDistribution()
-        }, 1000 * 60 * 60 * i) //1 hour
-    }
-
     for (i = 0; i < COIN_MINTING_ITERATIONS; i++) {
         setTimeout(() => {
-            startCoinMinting()
+            fetchOwnVillagesInfo(mintCoins);
+
         }, 1000 * 60 * 6 * i) //6 minutes
+    }
+
+    for (i = 0; i < RESOURCE_TRANSPORT_ITERATIONS; i++) {
+        setTimeout(() => {
+            sendResourcesIfViable()
+        }, 1000 * 60 * 60 * i) //1 hour
     }
 }
 
-function startCoinMinting() {
+function fetchOwnVillagesInfo(func) {
+    (function getOwnVillages() {
+        socketService.emit(
+            routeProvider.GET_CHARACTER_VILLAGES,
+            {},
+            response => {
+                onOwnVillagesFetched(response, func);
+            })
+    })();
+}
+
+function onOwnVillagesFetched(response, func) {
+    console.log(response);
+
+    response.villages.forEach((village) => {
+        if (village.academy) {
+            user.academyVillages.push(village)
+        } else {
+            user.plainVillages.push(village)
+        }
+    });
+
+    console.log("academy villages" + user.academyVillages);
+    console.log("plain villages" + user.plainVillages);
+
+    func();
+}
+
+function mintCoins() {
     user.academyVillages.forEach((academyVillage) => {
         let mintAmount = Math.min(
             Math.floor(academyVillage.res_wood / NOBLEMAN_COST[0]),
@@ -93,38 +122,11 @@ function startCoinMinting() {
                     amount: mintAmount
                 },
                 response => {
-                    onOwnVillagesFetched(response);
+                    console.log("MINTING RESPONSE");
+                    console.log(response)
                 })
         }
     })
-}
-
-function startResourceDistribution() {
-    (function getOwnVillages() {
-        socketService.emit(
-            routeProvider.GET_CHARACTER_VILLAGES,
-            {},
-            response => {
-                onOwnVillagesFetched(response);
-            })
-    })();
-}
-
-function onOwnVillagesFetched(response) {
-    console.log(response);
-
-    response.villages.forEach((village) => {
-        if (village.academy) {
-            user.academyVillages.push(village)
-        } else {
-            user.plainVillages.push(village)
-        }
-    });
-
-    console.log("academy villages" + user.academyVillages);
-    console.log("plain villages" + user.plainVillages);
-
-    sendResourcesIfViable()
 }
 
 function sendResourcesIfViable() {
@@ -145,7 +147,9 @@ function fetchAvailableMerchantsCount(village) {
 }
 
 function onAvailableMerchantsCountFetched(village, availableMerchantsCount) {
-    sendResourcesToClosestAcademyVillage(village, availableMerchantsCount)
+    if (availableMerchantsCount > 0) {
+        sendResourcesToClosestAcademyVillage(village, availableMerchantsCount)
+    }
 }
 
 function sendResourcesToClosestAcademyVillage(village, availableMerchantsCount) {
