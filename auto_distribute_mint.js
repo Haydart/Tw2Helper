@@ -18,9 +18,6 @@ function setupBot(_socketService, _routeProvider) {
 }
 
 function login() {
-    console.log(store.get("username"));
-    console.log(store.get("password"));
-
     socketService.emit(
         routeProvider.LOGIN,
         {
