@@ -9,6 +9,7 @@
   "author": "",
   "license": "ISC",
   "dependencies": {
+    "dotenv": "^6.2.0",
     "electron": "^3.0.10",
     "http-debug": "^0.1.2",
     "socket.io-client": "^2.0.3",
