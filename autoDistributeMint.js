@@ -64,12 +64,12 @@ function onCharacterSelected(response) {
 function distributeAndMintInIntervals() {
     for (i = 0; i < ITERATIONS; i++) {
         setTimeout(() => {
-            startDistributeAndMintProcedure()
+            startResourceDistribution()
         }, 1000 * 60 * 5 * i)
     }
 }
 
-function startDistributeAndMintProcedure() {
+function startResourceDistribution() {
     (function getOwnVillages() {
         socketService.emit(
             routeProvider.GET_CHARACTER_VILLAGES,
@@ -142,8 +142,6 @@ function sendResourcesToClosestAcademyVillage(village, availableMerchantsCount) 
 
 
 function performSendResources(startVillageId, targetVillageId, woodAmount, clayAmount, ironAmount) {
-    // 'data': ['start_village', 'target_village', 'wood', 'clay', 'iron']
-
     socketService.emit(
         routeProvider.TRADING_SEND_RESOURCES,
         {
