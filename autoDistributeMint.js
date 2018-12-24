@@ -127,7 +127,8 @@ function sendResourcesToClosestAcademyVillage(village, availableMerchantsCount) 
             Math.pow(village.x - academyVillage.x, 2) + Math.pow(village.y - academyVillage.y, 2)
         );
         if (distanceFromCurrentAcademyVillage < minDistanceToAcademyVillage) {
-            closestAcademyVillageId = academyVillage.id
+            minDistanceToAcademyVillage = distanceFromCurrentAcademyVillage;
+            closestAcademyVillageId = academyVillage.id;
         }
     });
 
