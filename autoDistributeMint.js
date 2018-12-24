@@ -1,3 +1,5 @@
+ITERATIONS = 10000;
+
 const Store = require('electron-store');
 const store = new Store();
 
@@ -52,19 +54,30 @@ function selectCharacter() {
             onCharacterSelected(response);
         })
 }
+
 function onCharacterSelected(response) {
     console.log(response);
 
-    getOwnVillages();
+    distributeAndMintInIntervals();
 }
 
-function getOwnVillages() {
-    socketService.emit(
-        routeProvider.GET_CHARACTER_VILLAGES,
-        {},
-        response => {
-            onOwnVillagesFetched(response);
-        })
+function distributeAndMintInIntervals() {
+    for (i = 0; i < ITERATIONS; i++) {
+        setTimeout(() => {
+            startDistributeAndMintProcedure()
+        }, 1000 * 5 * i)
+    }
+}
+
+function startDistributeAndMintProcedure() {
+    (function getOwnVillages() {
+        socketService.emit(
+            routeProvider.GET_CHARACTER_VILLAGES,
+            {},
+            response => {
+                onOwnVillagesFetched(response);
+            })
+    })();
 }
 
 function onOwnVillagesFetched(response) {
@@ -80,4 +93,27 @@ function onOwnVillagesFetched(response) {
 
     console.log("academy villages" + user.academyVillages);
     console.log("plain villages" + user.plainVillages);
+
+    sendRawMaterialsIfViable()
+}
+
+function sendRawMaterialsIfViable() {
+    user.plainVillages.forEach((village) => {
+        fetchAvailableMerchantsCount(village)
+    })
+}
+
+function fetchAvailableMerchantsCount(village) {
+    socketService.emit(
+        routeProvider.TRADING_GET_MERCHANT_STATUS,
+        {
+            village_id: village.id,
+        },
+        response => {
+            onAvailableMerchantsCountFetched(village, response)
+        })
+}
+
+function onAvailableMerchantsCountFetched(village, response) {
+
 }
