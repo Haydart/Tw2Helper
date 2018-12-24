@@ -1,5 +1,5 @@
-USERNAME = process.env.TW2_USERNAME;
-PASSWORD = process.env.TW2_PASSWORD;
+const Store = require('electron-store');
+const store = new Store();
 
 module.exports = {
     run(socketService, routeProvider) {
@@ -18,13 +18,14 @@ function setupBot(_socketService, _routeProvider) {
 }
 
 function login() {
-    console.log(USERNAME);
+    console.log(store.get("username"));
+    console.log(store.get("password"));
 
     socketService.emit(
         routeProvider.LOGIN,
         {
-            name: USERNAME,
-            pass: PASSWORD
+            name: store.get("username"),
+            pass: store.get("password")
         },
         response => {
             onLoginComplete(response);

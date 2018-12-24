@@ -1,6 +1,6 @@
+const distributeAndMint = require("./auto_distribute_mint");
 const {app, BrowserWindow} = require("electron");
 const path = require("path");
-const distributeAndMint = require("./auto_distribute_mint");
 
 function createWindow() {
     const window = new BrowserWindow({
