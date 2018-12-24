@@ -1,4 +1,4 @@
-const distributeAndMint = require("./auto_distribute_mint");
+const distributeAndMint = require("./autoDistributeMint");
 const {app, BrowserWindow} = require("electron");
 const path = require("path");
 
