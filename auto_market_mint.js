@@ -14,3 +14,17 @@ global.setTools = function setTools(_socketService, _routeProvider) {
 };
 
 function login() {
+    socketService.emit(
+        routeProvider.LOGIN,
+        {
+            name: USERNAME,
+            pass: PASSWORD
+        },
+        response => {
+            onLoginComplete(response);
+        })
+}
+
+function onLoginComplete(loginData) {
+    console.log(loginData)
+}
