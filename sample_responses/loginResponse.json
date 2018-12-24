@@ -1,0 +1,50 @@
+{
+  "player_id": 123456,
+  "name": "xxx",
+  "token": "xxx",
+  "characters": [
+    {
+      "character_id": 123456,
+      "character_name": "xxx",
+      "world_id": "xxx",
+      "world_name": "xxx",
+      "maintenance": false,
+      "allow_login": true,
+      "character_owner_id": 123456,
+      "character_owner_name": "xxx",
+      "key_required": false
+    }
+  ],
+  "worlds": [
+    {
+      "id": "xxx",
+      "name": "xxx",
+      "full": false,
+      "recommended": 0,
+      "key_required": false
+    },
+    {
+      "id": "xxx",
+      "name": "xxx",
+      "full": false,
+      "recommended": 0,
+      "key_required": false
+    },
+    {
+      "id": "xxx",
+      "name": "xxx",
+      "full": false,
+      "recommended": 0,
+      "key_required": false
+    }
+  ],
+  "invitations": [],
+  "premium": 24,
+  "server_timestamp": 1500000000,
+  "first_login": false,
+  "is_guest": false,
+  "vip": false,
+  "accepted_adjust": true,
+  "accepted_pixels": true,
+  "newsletter_window": true
+}
