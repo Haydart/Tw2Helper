@@ -52,3 +52,14 @@ function selectCharacter() {
             onCharacterSelected(response);
         })
 }
+
+function onCharacterSelected(response) {
+    console.log(response);
+
+    socketService.emit(
+        routeProvider.GROUPS_GET_VILLAGES,
+        {},
+        response => {
+            console.log(response)
+        })
+}
