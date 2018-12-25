@@ -1,6 +1,7 @@
 RESOURCE_TRANSPORT_ITERATIONS = 500;
 COIN_MINTING_ITERATIONS = 1000;
 NOBLEMAN_COST = [28000, 30000, 25000];
+NOT_SENT_RESOURCES_CAPACITY = 0.25; //to be left for recruitment and building purposes
 
 const Store = require('electron-store');
 const store = new Store();
@@ -67,14 +68,13 @@ function distributeAndMintInIntervals() {
     for (i = 0; i < COIN_MINTING_ITERATIONS; i++) {
         setTimeout(() => {
             fetchOwnVillagesInfo(mintCoins);
-
         }, 1000 * 60 * 6 * i)
     }
 
     for (i = 0; i < RESOURCE_TRANSPORT_ITERATIONS; i++) {
         setTimeout(() => {
             sendResourcesIfViable()
-        }, 1000 * 60 * 15 * i)
+        }, 1000 * 60 * 15 * i + 5000)
     }
 }
 
@@ -149,6 +149,8 @@ function fetchAvailableMerchantsCount(village) {
 function onAvailableMerchantsCountFetched(village, availableMerchantsCount) {
     if (availableMerchantsCount > 0) {
         sendResourcesToClosestAcademyVillage(village, availableMerchantsCount)
+    } else {
+        console.log("VILLAGE " + village.name + " HAS NO AVAILABLE MERCHANTS")
     }
 }
 
@@ -167,11 +169,26 @@ function sendResourcesToClosestAcademyVillage(village, availableMerchantsCount) 
     });
 
     let transportCapacity = availableMerchantsCount * 1000;
-    let woodAmount = Math.min(village.res_wood, Math.floor(transportCapacity / 3));
-    let clayAmount = Math.min(village.res_clay, Math.floor(transportCapacity / 3));
-    let ironAmount = Math.min(village.res_iron, Math.floor(transportCapacity / 3));
+    let villageMaxStorage = village.res_max_storage;
 
-    sendResources(village.id, closestAcademyVillageId, woodAmount, clayAmount, ironAmount)
+    let woodAmount = Math.min(
+        Math.max(village.res_wood - villageMaxStorage * NOT_SENT_RESOURCES_CAPACITY, 0),
+        Math.floor(transportCapacity / 3)
+    );
+    let clayAmount = Math.min(
+        Math.max(village.res_clay - villageMaxStorage * NOT_SENT_RESOURCES_CAPACITY, 0),
+        Math.floor(transportCapacity / 3)
+    );
+    let ironAmount = Math.min(
+        Math.max(village.res_iron - villageMaxStorage * NOT_SENT_RESOURCES_CAPACITY, 0),
+        Math.floor(transportCapacity / 3)
+    );
+
+    if (woodAmount > 0 && clayAmount > 0 && iron > 0) {
+        sendResources(village.id, closestAcademyVillageId, woodAmount, clayAmount, ironAmount)
+    } else {
+        console.log("VILLAGE " + village.name + " DID NOT HAVE SPARE RESOURCES")
+    }
 }
 
 
