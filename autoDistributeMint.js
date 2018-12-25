@@ -184,15 +184,15 @@ function sendResourcesToClosestAcademyVillage(village, availableMerchantsCount) 
         Math.floor(transportCapacity / 3)
     );
 
-    if (woodAmount > 0 && clayAmount > 0 && iron > 0) {
+    if (woodAmount > 0 || clayAmount > 0 || ironAmount > 0) {
         sendResources(village.id, closestAcademyVillageId, woodAmount, clayAmount, ironAmount)
     } else {
         console.log("VILLAGE " + village.name + " DID NOT HAVE SPARE RESOURCES")
     }
 }
 
-
 function sendResources(startVillageId, targetVillageId, woodAmount, clayAmount, ironAmount) {
+    console.log(woodAmount + " " + clayAmount + " " + ironAmount);
     socketService.emit(
         routeProvider.TRADING_SEND_RESOURCES,
         {
