@@ -91,6 +91,8 @@ function fetchOwnVillagesInfo(func) {
 
 function onOwnVillagesFetched(response, func) {
     console.log(response);
+    user.academyVillages = [];
+    user.plainVillages = [];
 
     response.villages.forEach((village) => {
         if (village.academy) {
@@ -171,18 +173,18 @@ function sendResourcesToClosestAcademyVillage(village, availableMerchantsCount) 
     let transportCapacity = availableMerchantsCount * 1000;
     let villageMaxStorage = village.res_max_storage;
 
-    let woodAmount = Math.min(
+    let woodAmount = Math.floor(Math.min(
         Math.max(village.res_wood - villageMaxStorage * NOT_SENT_RESOURCES_CAPACITY, 0),
         Math.floor(transportCapacity / 3)
-    );
-    let clayAmount = Math.min(
+    ));
+    let clayAmount = Math.floor(Math.min(
         Math.max(village.res_clay - villageMaxStorage * NOT_SENT_RESOURCES_CAPACITY, 0),
         Math.floor(transportCapacity / 3)
-    );
-    let ironAmount = Math.min(
+    ));
+    let ironAmount = Math.floor(Math.min(
         Math.max(village.res_iron - villageMaxStorage * NOT_SENT_RESOURCES_CAPACITY, 0),
         Math.floor(transportCapacity / 3)
-    );
+    ));
 
     if (woodAmount > 0 || clayAmount > 0 || ironAmount > 0) {
         sendResources(village.id, closestAcademyVillageId, woodAmount, clayAmount, ironAmount)
@@ -206,4 +208,3 @@ function sendResources(startVillageId, targetVillageId, woodAmount, clayAmount, 
             console.log(response)
         })
 }
-
