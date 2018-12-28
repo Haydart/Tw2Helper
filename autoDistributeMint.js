@@ -102,8 +102,8 @@ function onOwnVillagesFetched(response, andThenAction) {
         }
     });
 
-    console.log("Academy villages" + user.academyVillages.length);
-    console.log("Plain villages" + user.plainVillages.length);
+    console.log("Academy villages " + user.academyVillages.length);
+    console.log("Plain villages " + user.plainVillages.length);
 
     andThenAction();
 }
