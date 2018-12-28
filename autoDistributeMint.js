@@ -1,7 +1,7 @@
-RESOURCE_TRANSPORT_ITERATIONS = 500;
-COIN_MINTING_ITERATIONS = 1000;
-NOBLEMAN_COST = [28000, 30000, 25000];
-NOT_SENT_RESOURCES_CAPACITY = 0.5; //to be left for recruitment and building purposes
+const RESOURCE_TRANSPORT_ITERATIONS = 500;
+const COIN_MINTING_ITERATIONS = 1000;
+const NOBLEMAN_COST = [28000, 30000, 25000];
+const NOT_SENT_RESOURCES_CAPACITY = 0.5; //to be left for recruitment and building purposes
 
 const Store = require('electron-store');
 const store = new Store();
@@ -61,10 +61,10 @@ function selectCharacter() {
 function onCharacterSelected(response) {
     console.log(response);
 
-    distributeAndMintInIntervals();
+    sendResourcesAndMintInIntervals();
 }
 
-function distributeAndMintInIntervals() {
+function sendResourcesAndMintInIntervals() {
     for (i = 0; i < COIN_MINTING_ITERATIONS; i++) {
         setTimeout(() => {
             fetchOwnVillagesInfo(mintCoins);
@@ -78,18 +78,18 @@ function distributeAndMintInIntervals() {
     }
 }
 
-function fetchOwnVillagesInfo(func) {
+function fetchOwnVillagesInfo(andThenAction) {
     (function getOwnVillages() {
         socketService.emit(
             routeProvider.GET_CHARACTER_VILLAGES,
             {},
             response => {
-                onOwnVillagesFetched(response, func);
+                onOwnVillagesFetched(response, andThenAction);
             })
     })();
 }
 
-function onOwnVillagesFetched(response, func) {
+function onOwnVillagesFetched(response, andThenAction) {
     console.log(response);
     user.academyVillages = [];
     user.plainVillages = [];
@@ -102,10 +102,10 @@ function onOwnVillagesFetched(response, func) {
         }
     });
 
-    console.log("academy villages" + user.academyVillages);
-    console.log("plain villages" + user.plainVillages);
+    console.log("Academy villages" + user.academyVillages.length);
+    console.log("Plain villages" + user.plainVillages.length);
 
-    func();
+    andThenAction();
 }
 
 function mintCoins() {
