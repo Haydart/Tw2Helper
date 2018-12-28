@@ -158,7 +158,7 @@ function onAvailableMerchantsCountFetched(village, availableMerchantsCount) {
 
 function sendResourcesToClosestAcademyVillage(village, availableMerchantsCount) {
     let minDistanceToAcademyVillage = Number.MAX_SAFE_INTEGER;
-    let closestAcademyVillageId;
+    let closestAcademyVillageId = undefined;
 
     user.academyVillages.forEach((academyVillage) => {
         let distanceFromCurrentAcademyVillage = Math.sqrt(
@@ -187,14 +187,13 @@ function sendResourcesToClosestAcademyVillage(village, availableMerchantsCount) 
     ));
 
     if (woodAmount > 0 || clayAmount > 0 || ironAmount > 0) {
-        sendResources(village.id, closestAcademyVillageId, woodAmount, clayAmount, ironAmount)
+        sendResources(village, closestAcademyVillageId, woodAmount, clayAmount, ironAmount)
     } else {
         console.log("VILLAGE " + village.name + " HAS NO SPARE RESOURCES")
     }
 }
 
-function sendResources(startVillageId, targetVillageId, woodAmount, clayAmount, ironAmount) {
-    console.log(woodAmount + " " + clayAmount + " " + ironAmount);
+function sendResources(startVillage, targetVillageId, woodAmount, clayAmount, ironAmount) {
     socketService.emit(
         routeProvider.TRADING_SEND_RESOURCES,
         {
@@ -205,6 +204,6 @@ function sendResources(startVillageId, targetVillageId, woodAmount, clayAmount, 
             iron: ironAmount
         },
         response => {
-            console.log(response)
+            console.log("VILLAGE " + startVillage.name + " SENT " + woodAmount + " " + clayAmount + " " + ironAmount);
         })
 }
