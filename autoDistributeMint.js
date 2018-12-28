@@ -1,7 +1,7 @@
 RESOURCE_TRANSPORT_ITERATIONS = 500;
 COIN_MINTING_ITERATIONS = 1000;
 NOBLEMAN_COST = [28000, 30000, 25000];
-NOT_SENT_RESOURCES_CAPACITY = 0.25; //to be left for recruitment and building purposes
+NOT_SENT_RESOURCES_CAPACITY = 0.5; //to be left for recruitment and building purposes
 
 const Store = require('electron-store');
 const store = new Store();
@@ -157,8 +157,8 @@ function onAvailableMerchantsCountFetched(village, availableMerchantsCount) {
 }
 
 function sendResourcesToClosestAcademyVillage(village, availableMerchantsCount) {
-    let minDistanceToAcademyVillage = 1000;
-    let closestAcademyVillageId = undefined;
+    let minDistanceToAcademyVillage = Number.MAX_SAFE_INTEGER;
+    let closestAcademyVillageId;
 
     user.academyVillages.forEach((academyVillage) => {
         let distanceFromCurrentAcademyVillage = Math.sqrt(
@@ -189,7 +189,7 @@ function sendResourcesToClosestAcademyVillage(village, availableMerchantsCount) 
     if (woodAmount > 0 || clayAmount > 0 || ironAmount > 0) {
         sendResources(village.id, closestAcademyVillageId, woodAmount, clayAmount, ironAmount)
     } else {
-        console.log("VILLAGE " + village.name + " DID NOT HAVE SPARE RESOURCES")
+        console.log("VILLAGE " + village.name + " HAS NO SPARE RESOURCES")
     }
 }
 
