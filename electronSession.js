@@ -1,4 +1,4 @@
-const distributeAndMint = require("./autoDistributeMint");
+const sendResourcesAndMintCoins = require("./autoDistributeMint");
 const {app, BrowserWindow} = require("electron");
 const path = require("path");
 
@@ -21,11 +21,15 @@ function createWindow() {
         event.preventDefault();
     });
 
-    window.once("did-finish-load", () => {
+    window.webContents.on("did-finish-load", () => {
         console.log("Finished loading");
+        window.webContents.executeJavaScript(`
+            let rootScope = angular.element(document).scope();           
+            console.log(rootScope);
+        `);
     });
 }
 
 app.on("ready", createWindow);
 
-global.startBot = distributeAndMint.run;
+global.startBot = sendResourcesAndMintCoins.run;
