@@ -1,21 +1,6 @@
 const NOBLEMAN_COST = [28000, 30000, 25000];
 const NOT_SENT_RESOURCES_CAPACITY = 0.3; //to be left for recruitment and building purposes
 
-//for each village without academy send resources to closest village with an academy
-
-function sendResources() {
-    for (i = 0; i < COIN_MINTING_ITERATIONS; i++) {
-        setTimeout(() => {
-            fetchOwnVillagesInfo(mintCoins);
-        }, 1000 * 60 * 6 * i)
-    }
-
-    for (i = 0; i < RESOURCE_TRANSPORT_ITERATIONS; i++) {
-        setTimeout(() => {
-            sendResourcesIfViable()
-        }, 1000 * 60 * 15 * i + 5000)
-    }
-}
 
 function fetchOwnVillagesInfo(andThenAction) {
     (function getOwnVillages() {
@@ -47,28 +32,6 @@ function onOwnVillagesFetched(response, andThenAction) {
     andThenAction();
 }
 
-function mintCoins() {
-    user.academyVillages.forEach((academyVillage) => {
-        let mintAmount = Math.min(
-            Math.floor(academyVillage.res_wood / NOBLEMAN_COST[0]),
-            Math.floor(academyVillage.res_clay / NOBLEMAN_COST[1]),
-            Math.floor(academyVillage.res_iron / NOBLEMAN_COST[2])
-        );
-
-        if (mintAmount > 0) {
-            socketService.emit(
-                routeProvider.MINT_COINS,
-                {
-                    village_id: academyVillage.id,
-                    amount: mintAmount
-                },
-                response => {
-                    console.log("MINTING RESPONSE");
-                    console.log(response)
-                })
-        }
-    })
-}
 
 function sendResourcesIfViable() {
     user.plainVillages.forEach((village) => {
