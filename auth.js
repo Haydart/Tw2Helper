@@ -14,7 +14,7 @@ function loginUser(socketService, routeProvider, rootScope) {
     this.routeProvider = routeProvider;
     this.rootScope = rootScope;
 
-    return new Promise(((resolve, reject) => {
+    return new Promise(((resolve, _) => {
         login()
             .then(loginResponse => {
                 userModel.id = loginResponse.player_id;
@@ -29,7 +29,7 @@ function loginUser(socketService, routeProvider, rootScope) {
 }
 
 function login() {
-    return new Promise(((resolve, reject) => {
+    return new Promise(((resolve, _) => {
         this.socketService.emit(
             this.routeProvider.LOGIN,
             {
@@ -41,7 +41,7 @@ function login() {
 }
 
 function selectCharacter() {
-    return new Promise(((resolve, reject) => {
+    return new Promise(((resolve, _) => {
         this.socketService.emit(
             this.routeProvider.SELECT_CHARACTER,
             {

@@ -1,11 +1,9 @@
-const RESOURCE_TRANSPORT_ITERATIONS = 500;
-const COIN_MINTING_ITERATIONS = 1000;
 const NOBLEMAN_COST = [28000, 30000, 25000];
 const NOT_SENT_RESOURCES_CAPACITY = 0.3; //to be left for recruitment and building purposes
 
+//for each village without academy send resources to closest village with an academy
 
-
-function sendResourcesAndMintInIntervals() {
+function sendResources() {
     for (i = 0; i < COIN_MINTING_ITERATIONS; i++) {
         setTimeout(() => {
             fetchOwnVillagesInfo(mintCoins);

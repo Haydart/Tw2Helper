@@ -10,7 +10,7 @@ let socketService = null;
 let routeProvider = null;
 let rootScope = null;
 
-let user = {id: null, worldId: null, plainVillages: [], academyVillages: []};
+let user;
 
 function setupBot(_socketService, _routeProvider, _rootScope) {
     socketService = _socketService;
@@ -18,5 +18,8 @@ function setupBot(_socketService, _routeProvider, _rootScope) {
     rootScope = _rootScope;
 
     auth.authorize(socketService, routeProvider, rootScope)
-        .then(authResponse => console.log(authResponse))
+        .then(authResponse => {
+            user = authResponse;
+            console.log(user);
+        })
 }
