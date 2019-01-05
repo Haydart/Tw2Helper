@@ -1,4 +1,4 @@
-const botHandle = require("./mainBot");
+const botHandle = require("../mainBot");
 const {app, BrowserWindow} = require("electron");
 const path = require("path");
 
