@@ -5,6 +5,8 @@ module.exports = {
 };
 
 const auth = require("./auth");
+const resources = require("./distributeResources");
+const coins = require("./mintCoins");
 
 let socketService = null;
 let routeProvider = null;

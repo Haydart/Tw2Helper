@@ -1,10 +1,9 @@
 module.exports = {
-    authorize: (_socketService, _routeProvider, _rootScope) => loginUser(_socketService, _routeProvider, _rootScope)
+    authorize: (_socketService, _routeProvider) => loginUser(_socketService, _routeProvider)
 };
 
 let socketService = null;
 let routeProvider = null;
-let rootScope = null;
 const Store = require('electron-store');
 const store = new Store();
 let userModel = {id: null, worldId: null, loggedIn: false};
@@ -12,7 +11,6 @@ let userModel = {id: null, worldId: null, loggedIn: false};
 function loginUser(socketService, routeProvider, rootScope) {
     this.socketService = socketService;
     this.routeProvider = routeProvider;
-    this.rootScope = rootScope;
 
     return new Promise(((resolve, _) => {
         login()
