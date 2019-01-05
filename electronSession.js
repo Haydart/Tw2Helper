@@ -1,4 +1,4 @@
-const sendResourcesAndMintCoins = require("./autoDistributeMint");
+const botHandle = require("./mainBot");
 const {app, BrowserWindow} = require("electron");
 const path = require("path");
 
@@ -32,4 +32,4 @@ function createWindow() {
 
 app.on("ready", createWindow);
 
-global.startBot = sendResourcesAndMintCoins.run;
+global.startBot = botHandle.run;

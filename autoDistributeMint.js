@@ -1,70 +1,9 @@
 const RESOURCE_TRANSPORT_ITERATIONS = 500;
 const COIN_MINTING_ITERATIONS = 1000;
 const NOBLEMAN_COST = [28000, 30000, 25000];
-const NOT_SENT_RESOURCES_CAPACITY = 0.4; //to be left for recruitment and building purposes
+const NOT_SENT_RESOURCES_CAPACITY = 0.3; //to be left for recruitment and building purposes
 
-const Store = require('electron-store');
-const store = new Store();
 
-module.exports = {
-    run(socketService, routeProvider, rootScope) {
-        setupBot(socketService, routeProvider, rootScope)
-    }
-};
-
-let socketService = null;
-let routeProvider = null;
-let rootScope = null;
-let user = {id: null, worldId: null, plainVillages: [], academyVillages: []};
-
-function setupBot(_socketService, _routeProvider, _rootScope) {
-    socketService = _socketService;
-    routeProvider = _routeProvider;
-    rootScope = _rootScope;
-
-    login()
-}
-
-function login() {
-    socketService.emit(
-        routeProvider.LOGIN,
-        {
-            name: store.get("username"),
-            pass: store.get("password")
-        },
-        response => {
-            onLoginComplete(response);
-        })
-}
-
-function onLoginComplete(loginData) {
-    console.log(loginData);
-
-    user.id = loginData.player_id;
-    user.worldId = loginData.characters[0].world_id;
-    console.log(user);
-
-    selectCharacter();
-}
-
-function selectCharacter() {
-    socketService.emit(
-        routeProvider.SELECT_CHARACTER,
-        {
-            id: user.id,
-            world_id: user.worldId,
-            ref_param: undefined
-        },
-        response => {
-            onCharacterSelected(response);
-        })
-}
-
-function onCharacterSelected(response) {
-    console.log(response);
-
-    sendResourcesAndMintInIntervals();
-}
 
 function sendResourcesAndMintInIntervals() {
     for (i = 0; i < COIN_MINTING_ITERATIONS; i++) {
