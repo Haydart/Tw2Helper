@@ -1,8 +1,5 @@
 module.exports = {
     authorize: (_socketService, _routeProvider, _rootScope) => loginUser(_socketService, _routeProvider, _rootScope)
-    // authorize(socketService, routeProvider, rootScope) {
-    //     loginUser(socketService, routeProvider, rootScope)
-    // }
 };
 
 let socketService = null;
