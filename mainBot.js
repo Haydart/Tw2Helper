@@ -4,6 +4,8 @@ module.exports = {
     }
 };
 
+const auth = require("./auth");
+
 let socketService = null;
 let routeProvider = null;
 let rootScope = null;
@@ -14,10 +16,7 @@ function setupBot(_socketService, _routeProvider, _rootScope) {
     socketService = _socketService;
     routeProvider = _routeProvider;
     rootScope = _rootScope;
-    authorize()
-}
 
-
-function runScheduledCommandsInLoop() {
-
+    auth.authorize(socketService, routeProvider, rootScope)
+        .then(authResponse => console.log(authResponse))
 }
