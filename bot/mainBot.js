@@ -10,16 +10,18 @@ const resources = require("./distributeResources");
 const coins = require("./mintCoins");
 
 let user;
+let villages;
 
 function setupBot(_socketService, _routeProvider, _rootScope) {
 
     auth.authorize(_socketService, _routeProvider, _rootScope)
         .then(authResponse => {
             user = authResponse;
-            console.log(user);
             return villageData.fetchOwnVillagesData(_socketService, _routeProvider)
         })
         .then(villagesData => {
-            console.log(villagesData)
+            villages = villagesData;
+            coins.mintCoins(_socketService, _routeProvider, villages.academyVillages)
         })
+        .then()
 }

@@ -34,7 +34,7 @@ function fetchVillagesData() {
 function processVillagesData(response) {
     let villagesModel = {plainVillages: [], academyVillages: [], preceptoryOrderVillages: []};
 
-    response.villages.forEach((village) => {
+    response.villages.forEach(village => {
         let preceptoryOrAcademy = false;
 
         if (village.academy) {
