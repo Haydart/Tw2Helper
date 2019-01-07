@@ -3,6 +3,7 @@ module.exports = {
 };
 
 const NOBLEMAN_COST = [28000, 30000, 25000];
+const ACADEMY_VILLAGE_RESOURCES_RESERVE = 75000;
 
 let socketService = null;
 let routeProvider = null;
@@ -17,9 +18,9 @@ function mintCoins(socketService, routeProvider, academyVillages) {
 
     academyVillages.forEach((academyVillage) => {
         let mintAmount = Math.min(
-            Math.floor(academyVillage.res_wood / NOBLEMAN_COST[0]),
-            Math.floor(academyVillage.res_clay / NOBLEMAN_COST[1]),
-            Math.floor(academyVillage.res_iron / NOBLEMAN_COST[2])
+            Math.floor(Math.min(0, academyVillage.res_wood - ACADEMY_VILLAGE_RESOURCES_RESERVE) / NOBLEMAN_COST[0]),
+            Math.floor(Math.min(0, academyVillage.res_clay - ACADEMY_VILLAGE_RESOURCES_RESERVE) / NOBLEMAN_COST[1]),
+            Math.floor(Math.min(0, academyVillage.res_iron - ACADEMY_VILLAGE_RESOURCES_RESERVE) / NOBLEMAN_COST[2])
         );
 
         if (mintAmount) {
