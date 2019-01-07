@@ -16,25 +16,27 @@ function mintCoins(socketService, routeProvider, academyVillages) {
     let mintingPromises = [];
 
     academyVillages.forEach((academyVillage) => {
-        mintingPromises.push(new Promise((resolve, _) => {
+        let mintAmount = Math.min(
+            Math.floor(academyVillage.res_wood / NOBLEMAN_COST[0]),
+            Math.floor(academyVillage.res_clay / NOBLEMAN_COST[1]),
+            Math.floor(academyVillage.res_iron / NOBLEMAN_COST[2])
+        );
 
-            let mintAmount = Math.min(
-                Math.floor(academyVillage.res_wood / NOBLEMAN_COST[0]),
-                Math.floor(academyVillage.res_clay / NOBLEMAN_COST[1]),
-                Math.floor(academyVillage.res_iron / NOBLEMAN_COST[2])
-            );
+        if (mintAmount) {
+            mintingPromises.push(new Promise((resolve, _) => {
 
-            socketService.emit(
-                routeProvider.MINT_COINS,
-                {
-                    village_id: academyVillage.id,
-                    amount: mintAmount
-                },
-                response => {
-                    console.log(response);
-                    resolve(response)
-                })
-        }));
+                socketService.emit(
+                    routeProvider.MINT_COINS,
+                    {
+                        village_id: academyVillage.id,
+                        amount: mintAmount
+                    },
+                    response => {
+                        console.log(response);
+                        resolve(response)
+                    })
+            }));
+        }
     });
 
     return new Promise(resolve => {
