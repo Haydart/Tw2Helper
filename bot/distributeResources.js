@@ -1,5 +1,5 @@
 const NOBLEMAN_COST = [28000, 30000, 25000];
-const NOT_SENT_RESOURCES_CAPACITY = 0.3; //to be left for recruitment and building purposes
+const NOT_SENT_RESOURCES_CAPACITY = 0.3;
 
 
 function fetchOwnVillagesInfo(andThenAction) {
@@ -31,7 +31,6 @@ function onOwnVillagesFetched(response, andThenAction) {
 
     andThenAction();
 }
-
 
 function sendResourcesIfViable() {
     user.plainVillages.forEach((village) => {

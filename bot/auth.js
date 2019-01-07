@@ -17,9 +17,10 @@ function loginUser(socketService, routeProvider, rootScope) {
             .then(loginResponse => {
                 userModel.id = loginResponse.player_id;
                 userModel.worldId = loginResponse.characters[0].world_id;
-                selectCharacter()
+                return selectCharacter()
             })
             .then(selectCharacterResponse => {
+                console.log(selectCharacterResponse);
                 userModel.loggedIn = true;
                 resolve(userModel)
             })
@@ -39,7 +40,7 @@ function login() {
 }
 
 function selectCharacter() {
-    return new Promise(((resolve, _) => {
+    return new Promise((resolve, _) => {
         this.socketService.emit(
             this.routeProvider.SELECT_CHARACTER,
             {
@@ -47,6 +48,10 @@ function selectCharacter() {
                 world_id: userModel.worldId,
                 ref_param: undefined
             },
-            response => resolve(response))
-    }));
+            response => {
+                console.log("Character selected", Date.now());
+                console.log(response);
+                resolve(response)
+            })
+    });
 }
