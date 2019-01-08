@@ -18,9 +18,9 @@ function mintCoins(socketService, routeProvider, academyVillages) {
 
     academyVillages.forEach((academyVillage) => {
         let mintAmount = Math.min(
-            Math.floor(Math.min(0, academyVillage.res_wood - ACADEMY_VILLAGE_RESOURCES_RESERVE) / NOBLEMAN_COST[0]),
-            Math.floor(Math.min(0, academyVillage.res_clay - ACADEMY_VILLAGE_RESOURCES_RESERVE) / NOBLEMAN_COST[1]),
-            Math.floor(Math.min(0, academyVillage.res_iron - ACADEMY_VILLAGE_RESOURCES_RESERVE) / NOBLEMAN_COST[2])
+            Math.floor(Math.max(0, academyVillage.res_wood - ACADEMY_VILLAGE_RESOURCES_RESERVE) / NOBLEMAN_COST[0]),
+            Math.floor(Math.max(0, academyVillage.res_clay - ACADEMY_VILLAGE_RESOURCES_RESERVE) / NOBLEMAN_COST[1]),
+            Math.floor(Math.max(0, academyVillage.res_iron - ACADEMY_VILLAGE_RESOURCES_RESERVE) / NOBLEMAN_COST[2])
         );
 
         if (mintAmount) {
