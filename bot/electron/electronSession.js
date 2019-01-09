@@ -26,6 +26,10 @@ function createWindow() {
         window.webContents.executeJavaScript(`
             let rootScope = angular.element(document).scope();           
             console.log(rootScope);
+            
+            rootScope.$on('Command/sent', function listener(event, command) {
+                console.log(command)
+            });
         `);
     });
 }

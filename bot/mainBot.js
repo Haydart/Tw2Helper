@@ -1,6 +1,6 @@
 module.exports = {
-    run(socketService, routeProvider, rootScope) {
-        setupBot(socketService, routeProvider, rootScope)
+    run(_socketService, _routeProvider, _eventTypeProvider, _rootScope) {
+        setupBot(_socketService, _routeProvider, _eventTypeProvider, _rootScope)
     }
 };
 
@@ -12,18 +12,32 @@ const coins = require("./mintCoins");
 let user;
 let villages;
 
-function setupBot(_socketService, _routeProvider, _rootScope) {
+function setupBot(socketService, routeProvider, eventTypeProvider, rootScope) {
 
-    auth.authorize(_socketService, _routeProvider, _rootScope)
+    auth.authorize(socketService, routeProvider, rootScope)
         .then(authResponse => {
             user = authResponse;
-            return villageData.fetchOwnVillagesData(_socketService, _routeProvider)
+            return villageData.fetchOwnVillagesData(socketService, routeProvider)
         })
         .then(villagesData => {
             villages = villagesData;
-            coins.mintCoins(_socketService, _routeProvider, villages.academyVillages)
+            coins.mintCoins(socketService, routeProvider, villages.academyVillages)
         })
         .then(ignored => {
-            resources.sendResources(_socketService, _routeProvider, villages.plainVillages, villages.academyVillages)
+            resources.sendResources(socketService, routeProvider, villages.plainVillages, villages.academyVillages)
         })
+        .then(ignored => otherOperations(rootScope, eventTypeProvider))
+}
+
+
+function otherOperations(rootScope, eventTypeProvider) {
+    const originalConsoleLog = console.log.bind(console);
+    console.log = (...args) => {
+        // writeArgsToFile(args);
+        originalConsoleLog(...args);
+    };
+
+    rootScope.$on('', function listener(event, command) {
+        console.log(command)
+    });
 }

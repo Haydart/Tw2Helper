@@ -25,11 +25,11 @@ function sendResourcesIfViable(socketService, routeProvider, plainVillages, acad
                     if (availableMerchantsCount > 0) {
                         return sendResourcesToClosestAcademyVillage(plainVillage, availableMerchantsCount)
                     } else {
-                        return new Promise.resolve()
+                        console.log("VILLAGE " + plainVillage.name + ' HAS NO AVAILABLE MERCHANTS');
+                        return Promise.resolve()
                     }
                 })
                 .then(resourceSendingResponse => {
-                    console.log("Finished resources sending process to village " + plainVillage.name);
                     resolve(resourceSendingResponse)
                 })
         }));
