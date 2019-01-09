@@ -23,5 +23,7 @@ function setupBot(_socketService, _routeProvider, _rootScope) {
             villages = villagesData;
             coins.mintCoins(_socketService, _routeProvider, villages.academyVillages)
         })
-        .then()
+        .then(ignored => {
+            resources.sendResources(_socketService, _routeProvider, villages.plainVillages, villages.academyVillages)
+        })
 }
