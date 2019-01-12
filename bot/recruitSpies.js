@@ -20,6 +20,7 @@ function recruitSpies(socketService, routeProvider, villages) {
             fetchVillageSpyInfo(village.id)
                 .then(spiesInfoResponse => {
                     let slotsToRecruit = createRecruitmentList(spiesInfoResponse);
+                    console.log("recruiting spies for " + village.name + ", on slots " + slotsToRecruit);
                     return recruitSpiesForVillage(village.id, slotsToRecruit)
                 })
                 .then(spiesRecruitmentResponse => {
@@ -55,23 +56,31 @@ function createRecruitmentList(villageSpiesResponse) {
     if (villageSpiesResponse.spy_2 === 0) recruitmentSlots.push(2);
     if (villageSpiesResponse.spy_3 === 0) recruitmentSlots.push(3);
     if (villageSpiesResponse.spy_4 === 0) recruitmentSlots.push(4);
-    if (TARGET_SPIES_AMOUNT === 4 && villageSpiesResponse.spy_5 === 0) recruitmentSlots.push(5);
+    if (TARGET_SPIES_AMOUNT === 5 && villageSpiesResponse.spy_5 === 0) recruitmentSlots.push(5);
     return recruitmentSlots
 }
 
-function recruitSpiesForVillage(id, slotsToRecruit) {
+function recruitSpiesForVillage(villageId, slotsToRecruit) {
     let singleVillageRecruitmentPromises = [];
 
-    return new Promise((resolve, reject) => {
-        this.socketService.emit(
-            this.routeProvider.SCOUTING_RECRUIT,
-            {
-                village_id: villageId,
-                slot
-            },
-            response => {
-                console.log(response);
-                resolve(response)
-            })
+    slotsToRecruit.forEach(slotNumber => {
+        console.log(slotNumber);
+        singleVillageRecruitmentPromises.push(new Promise(resolve => {
+            this.socketService.emit(
+                this.routeProvider.SCOUTING_RECRUIT,
+                {
+                    village_id: villageId,
+                    slot: slotNumber
+                },
+                response => {
+                    console.log(response);
+                    resolve(response)
+                })
+        }))
     });
+    return new Promise(resolve => Promise
+        .all(singleVillageRecruitmentPromises)
+        .then(resolve)
+    );
+
 }
