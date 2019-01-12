@@ -57,6 +57,11 @@ function fetchVillageSpyInfo(villageId) {
 function createRecruitmentList(villageSpiesResponse, villageTavernLevel) {
     let maxPossibleSpiesForCurrentVillage;
 
+    if (villageTavernLevel === 0) {
+        maxPossibleSpiesForCurrentVillage = 0
+    } else {
+        maxPossibleSpiesForCurrentVillage = clamp(Math.floor(villageTavernLevel / 3 + 1), 0, 5)
+    }
 
     let recruitmentSlots = [];
     if (villageSpiesResponse.spy_1 === 0 && maxPossibleSpiesForCurrentVillage >= 1) recruitmentSlots.push(1);
