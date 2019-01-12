@@ -17,7 +17,6 @@ function recruitSpies(socketService, routeProvider, villages) {
     let spyRecruitmentPromises = [];
 
     villages.forEach(village => {
-        console.log(village);
         spyRecruitmentPromises.push(new Promise(resolve => {
             fetchVillageSpyInfo(village.id)
                 .then(spiesInfoResponse => {

@@ -8,7 +8,7 @@ let routeProvider = null;
 let plainVillages = null;
 let academyVillages = null;
 
-const NOT_SENT_RESOURCES_CAPACITY = 0.6;
+const NOT_SENT_RESOURCES_CAPACITY = 0.4;
 
 function sendResourcesIfViable(socketService, routeProvider, plainVillages, academyVillages) {
     this.socketService = socketService;
