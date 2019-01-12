@@ -8,6 +8,7 @@ const auth = require("./auth");
 const villageData = require("./fetchVillagesInfo");
 const resources = require("./distributeResources");
 const coins = require("./mintCoins");
+const recruitSpies = require("./recruitSpies");
 
 let user;
 let villages;
@@ -26,9 +27,10 @@ function setupBot(socketService, routeProvider, eventTypeProvider, rootScope) {
         .then(ignored => {
             resources.sendResources(socketService, routeProvider, villages.plainVillages, villages.academyVillages)
         })
-        .then(ignored => otherOperations(rootScope, eventTypeProvider))
+        .then(ignored => {
+            recruitSpies.recruitSpies(socketService, routeProvider, villages.allVillages)
+        })
 }
-
 
 function otherOperations(rootScope, eventTypeProvider) {
     const originalConsoleLog = console.log.bind(console);

@@ -32,9 +32,10 @@ function fetchVillagesData() {
 }
 
 function processVillagesData(response) {
-    let villagesModel = {plainVillages: [], academyVillages: [], preceptoryOrderVillages: []};
+    let villagesModel = {allVillages: [], plainVillages: [], academyVillages: [], preceptoryOrderVillages: []};
 
     response.villages.forEach(village => {
+
         let preceptoryOrAcademy = false;
 
         if (village.academy) {
@@ -50,6 +51,8 @@ function processVillagesData(response) {
             villagesModel.plainVillages.push(village)
         }
     });
+
+    villagesModel.allVillages = response.villages;
 
     console.log("Academy villages " + villagesModel.academyVillages.length);
     console.log("Preceptory order villages " + villagesModel.preceptoryOrderVillages.length);
