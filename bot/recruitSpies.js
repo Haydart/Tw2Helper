@@ -3,6 +3,7 @@ module.exports = {
 };
 
 TARGET_SPIES_AMOUNT = 4;
+MAX_POSSIBLE_SPIES_AMOUNT = 5;
 
 let socketService;
 let routeProvider;
@@ -16,15 +17,20 @@ function recruitSpies(socketService, routeProvider, villages) {
     let spyRecruitmentPromises = [];
 
     villages.forEach(village => {
+        console.log(village);
         spyRecruitmentPromises.push(new Promise(resolve => {
             fetchVillageSpyInfo(village.id)
                 .then(spiesInfoResponse => {
-                    let slotsToRecruit = createRecruitmentList(spiesInfoResponse);
-                    console.log("recruiting spies for " + village.name + ", on slots " + slotsToRecruit);
-                    return recruitSpiesForVillage(village.id, slotsToRecruit)
+                    let slotsToRecruit = createRecruitmentList(spiesInfoResponse, village.building_levels.tavern);
+                    if (slotsToRecruit.length > 0) {
+                        console.log("RECRUITING SPIES FOR " + village.name + ", ON SLOTS " + slotsToRecruit);
+                        return recruitSpiesForVillage(village.id, slotsToRecruit)
+                    } else {
+                        console.log("COULD NOT RECRUIT SPIES FOR " + village.name);
+                        return Promise.resolve()
+                    }
                 })
                 .then(spiesRecruitmentResponse => {
-                    console.log(spiesRecruitmentResponse);
                     resolve(spiesRecruitmentResponse)
                 })
         }));
@@ -43,28 +49,33 @@ function fetchVillageSpyInfo(villageId) {
             {
                 village_id: villageId,
             },
-            response => {
-                console.log(response);
-                resolve(response)
-            })
+            response => resolve(response)
+        )
     })
 }
 
-function createRecruitmentList(villageSpiesResponse) {
+function createRecruitmentList(villageSpiesResponse, villageTavernLevel) {
+    let maxPossibleSpiesForCurrentVillage;
+
+
     let recruitmentSlots = [];
-    if (villageSpiesResponse.spy_1 === 0) recruitmentSlots.push(1);
-    if (villageSpiesResponse.spy_2 === 0) recruitmentSlots.push(2);
-    if (villageSpiesResponse.spy_3 === 0) recruitmentSlots.push(3);
-    if (villageSpiesResponse.spy_4 === 0) recruitmentSlots.push(4);
-    if (TARGET_SPIES_AMOUNT === 5 && villageSpiesResponse.spy_5 === 0) recruitmentSlots.push(5);
+    if (villageSpiesResponse.spy_1 === 0 && maxPossibleSpiesForCurrentVillage >= 1) recruitmentSlots.push(1);
+    if (villageSpiesResponse.spy_2 === 0 && maxPossibleSpiesForCurrentVillage >= 2) recruitmentSlots.push(2);
+    if (villageSpiesResponse.spy_3 === 0 && maxPossibleSpiesForCurrentVillage >= 3) recruitmentSlots.push(3);
+    if (villageSpiesResponse.spy_4 === 0 && maxPossibleSpiesForCurrentVillage >= 4) recruitmentSlots.push(4);
+    if (TARGET_SPIES_AMOUNT === MAX_POSSIBLE_SPIES_AMOUNT
+        && villageSpiesResponse.spy_5 === 0 && maxPossibleSpiesForCurrentVillage === 5) recruitmentSlots.push(5);
     return recruitmentSlots
+}
+
+function clamp(num, min, max) {
+    return num <= min ? min : num >= max ? max : num;
 }
 
 function recruitSpiesForVillage(villageId, slotsToRecruit) {
     let singleVillageRecruitmentPromises = [];
 
     slotsToRecruit.forEach(slotNumber => {
-        console.log(slotNumber);
         singleVillageRecruitmentPromises.push(new Promise(resolve => {
             this.socketService.emit(
                 this.routeProvider.SCOUTING_RECRUIT,
@@ -72,15 +83,12 @@ function recruitSpiesForVillage(villageId, slotsToRecruit) {
                     village_id: villageId,
                     slot: slotNumber
                 },
-                response => {
-                    console.log(response);
-                    resolve(response)
-                })
+                response => resolve(response)
+            )
         }))
     });
     return new Promise(resolve => Promise
         .all(singleVillageRecruitmentPromises)
         .then(resolve)
     );
-
 }
