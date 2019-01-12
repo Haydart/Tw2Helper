@@ -377,7 +377,7 @@ injector.get('routeProvider') === {
         'data': ['village_id']
     },
     'MINT_COINS': {
-        'type': 'Academy/mintCoins',
+        'type': 'Academy/run',
         'data': ['village_id', 'amount']
     },
     'MASS_MINT_COINS': {
@@ -575,7 +575,7 @@ injector.get('routeProvider') === {
 
     /* TRADING */
     'TRADING_SEND_RESOURCES': {
-        'type': 'Trading/sendResources',
+        'type': 'Trading/run',
         'data': ['start_village', 'target_village', 'wood', 'clay', 'iron']
     },
     'TRADING_GET_TRANSPORTS': {

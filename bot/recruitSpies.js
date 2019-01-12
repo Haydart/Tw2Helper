@@ -1,5 +1,5 @@
 module.exports = {
-    recruitSpies: (_socketService, _routeProvider, _allVillages) => recruitSpies(_socketService, _routeProvider, _allVillages)
+    run: (_socketService, _routeProvider, _allVillages) => recruitSpies(_socketService, _routeProvider, _allVillages)
 };
 
 TARGET_SPIES_AMOUNT = 4;

@@ -5,9 +5,9 @@ module.exports = {
 };
 
 const auth = require("./auth");
-const villageData = require("./fetchVillagesInfo");
-const resources = require("./distributeResources");
-const coins = require("./mintCoins");
+const fetchBasicVillagesData = require("./fetchVillagesInfo");
+const distributeResources = require("./distributeResources");
+const mintCoins = require("./mintCoins");
 const recruitSpies = require("./recruitSpies");
 
 let user;
@@ -18,17 +18,17 @@ function setupBot(socketService, routeProvider, eventTypeProvider, rootScope) {
     auth.authorize(socketService, routeProvider, rootScope)
         .then(authResponse => {
             user = authResponse;
-            return villageData.fetchOwnVillagesData(socketService, routeProvider)
+            return fetchBasicVillagesData.run(socketService, routeProvider)
         })
         .then(villagesData => {
             villages = villagesData;
-            coins.mintCoins(socketService, routeProvider, villages.academyVillages)
+            mintCoins.run(socketService, routeProvider, villages.academyVillages)
         })
         .then(ignored => {
-            resources.sendResources(socketService, routeProvider, villages.plainVillages, villages.academyVillages)
+            distributeResources.run(socketService, routeProvider, villages.plainVillages, villages.academyVillages)
         })
         .then(ignored => {
-            recruitSpies.recruitSpies(socketService, routeProvider, villages.allVillages)
+            recruitSpies.run(socketService, routeProvider, villages.allVillages)
         })
 }
 

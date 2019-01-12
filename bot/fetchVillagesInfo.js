@@ -1,5 +1,5 @@
 module.exports = {
-    fetchOwnVillagesData: (_socketService, _routeProvider) => fetchAndOrderOwnVillagesData(_socketService, _routeProvider)
+    run: (_socketService, _routeProvider) => fetchAndOrderOwnVillagesData(_socketService, _routeProvider)
 };
 
 let socketService = null;

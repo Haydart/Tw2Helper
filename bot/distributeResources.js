@@ -1,5 +1,5 @@
 module.exports = {
-    sendResources: (_socketService, _routeProvider, _plainVillages, _academyVillages) =>
+    run: (_socketService, _routeProvider, _plainVillages, _academyVillages) =>
         sendResourcesIfViable(_socketService, _routeProvider, _plainVillages, _academyVillages)
 };
 

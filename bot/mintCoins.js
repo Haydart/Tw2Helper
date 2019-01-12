@@ -1,5 +1,5 @@
 module.exports = {
-    mintCoins: (_socketService, _routeProvider, _academyVillages) => mintCoins(_socketService, _routeProvider, _academyVillages)
+    run: (_socketService, _routeProvider, _academyVillages) => mintCoins(_socketService, _routeProvider, _academyVillages)
 };
 
 const NOBLEMAN_COST = [28000, 30000, 25000];
